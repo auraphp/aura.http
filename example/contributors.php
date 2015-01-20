@@ -14,8 +14,14 @@ $request->headers->set('User-Agent', 'Mozilla');
 $stack = $http->send($request);
 $repos = json_decode($stack[0]->content);
 $contributors = array();
+$i = 0;
 foreach ($repos as $repo) {
+    $i++;
+    if ($i > 2) {
+        break;
+    }
     $repo_url = "https://api.github.com/repos/auraphp/{$repo->name}/contributors";
+    // Earlier usage. This was used with Aura.Http version 1.0.2, 6d219344b87fed3ece6976d0dae2ba58c393fc31
     // $http = require __DIR__ . '/vendor/aura/http/scripts/instance.php';
     // $request = $http->newRequest();
     // $request->setAuth(Request::AUTH_BASIC);
@@ -35,4 +41,3 @@ foreach ($repos as $repo) {
         echo $e->getMessage();
     }
 }
-file_put_contents('contribute.json', json_encode($contributors));
