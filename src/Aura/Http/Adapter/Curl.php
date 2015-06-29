@@ -443,10 +443,12 @@ class Curl implements AdapterInterface
             return;
         }
 
-        // send only for POST or PUT
+        // send only for POST or PUT or DELETE
+        // DELETE can have a body sent
         $method = $this->request->method;
         $post_or_put = $method == Request::METHOD_POST
-                    || $method == Request::METHOD_PUT;
+                    || $method == Request::METHOD_PUT
+                    || $method == Request::METHOD_DELETE;
         if (! $post_or_put) {
             return;
         }
@@ -458,7 +460,7 @@ class Curl implements AdapterInterface
         } else {
             // CURLOPT_PUT only works with INFILE, to use a string you must use 
             // customrequest instead
-             if($method == Request::METHOD_PUT) {
+            if($method == Request::METHOD_PUT) {
                 curl_setopt($this->curl, CURLOPT_PUT, false);
                 curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             }
